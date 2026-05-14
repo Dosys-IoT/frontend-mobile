@@ -69,8 +69,45 @@ class MedicationService {
     return res.statusCode == 204;
   }
 
+  static Future<DeviceModel?> createDevice(String name) async {
+    final res = await ApiClient.post(
+      '/api/v1/medication/devices',
+      {'name': name},
+      auth: true,
+    );
+    if (res.statusCode == 200 || res.statusCode == 201) {
+      return DeviceModel.fromJson(jsonDecode(res.body) as Map<String, dynamic>);
+    }
+    return null;
+  }
+
+  static Future<bool> createSchedule(
+    int deviceId,
+    Map<String, dynamic> body,
+  ) async {
+    final res = await ApiClient.post(
+      '/api/v1/medication/devices/$deviceId/schedules',
+      body,
+      auth: true,
+    );
+    return res.statusCode == 200 || res.statusCode == 201;
+  }
+
   static Future<Map<String, dynamic>?> getLatestEnvironment(int deviceId) async {
     final res = await ApiClient.get('/api/v1/medication/devices/$deviceId/environment/latest');
+    if (res.statusCode == 200) {
+      return jsonDecode(res.body) as Map<String, dynamic>;
+    }
+    return null;
+  }
+
+  static Future<Map<String, dynamic>?> getAdherenceCalendar(
+    int deviceId,
+    String month,
+  ) async {
+    final res = await ApiClient.get(
+      '/api/v1/medication/devices/$deviceId/adherence/calendar?month=$month',
+    );
     if (res.statusCode == 200) {
       return jsonDecode(res.body) as Map<String, dynamic>;
     }

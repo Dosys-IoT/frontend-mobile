@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiClient {
-  static const baseUrl = 'http://localhost:8080';
+  static const baseUrl = 'https://dosys-backend-149855215912.us-central1.run.app';
 
   static Future<String?> _getToken() async {
     final prefs = await SharedPreferences.getInstance();
